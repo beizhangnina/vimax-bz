@@ -8,6 +8,8 @@ from .image_generator_nanobanana_google_api import ImageGeneratorNanobananaGoogl
 from .image_generator_nanobanana_yunwu_api import ImageGeneratorNanobananaYunwuAPI
 from .image_generator_token360_api import ImageGeneratorToken360API
 from .token360_assets import Token360AssetUploader
+from .stylized_video_pipeline import StylizedVideoPipeline, STYLE_PROMPTS
+from .chained_video_pipeline import ChainedVideoPipeline
 
 # reranker for rag
 from .reranker_bge_silicon_api import RerankerBgeSiliconapi
@@ -28,6 +30,9 @@ __all__ = [
     "ImageGeneratorNanobananaYunwuAPI",
     "ImageGeneratorToken360API",
     "Token360AssetUploader",
+    "StylizedVideoPipeline",
+    "STYLE_PROMPTS",
+    "ChainedVideoPipeline",
     "RerankerBgeSiliconapi",
     "VideoGeneratorDoubaoSeedanceYunwuAPI",
     "VideoGeneratorSeedanceToken360API",

@@ -43,6 +43,18 @@
 > **Real-person video:** Seedance has content moderation on first-frame inputs. For verified
 > human characters, create a `REAL_FACE` asset group via Token360's RealFace flow and pass the
 > resulting URIs to the video adapter via `portrait_asset_uris=["asset://..."]`.
+>
+> **Ready-made scripts (in `scripts/`):**
+> - `probe_token360.py` — list which chat / image / video model IDs are live on your key.
+> - `create_realface.py` — one-shot RealFace bootstrap: creates a group, shows the H5
+>   verification link as an ASCII QR for phone scanning, uploads the portrait once the H5 scan
+>   completes, and writes the final `asset://ta_…` URI to `output/realface_uri.txt`. Example:
+>   ```bash
+>   uv run python scripts/create_realface.py --name "Bei" --photo pics/Bei.jpg
+>   ```
+> - `demo_nina_yl.py` — sample multi-subject demo: pre-processes two reference photos,
+>   generates wholesome scene variations through Nano Banana Pro i2i, then renders short
+>   Seedance 2.0 clips. Outputs land in `output/demo_<subject>/`.
 
 ---
 
