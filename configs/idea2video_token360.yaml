@@ -1,0 +1,45 @@
+# Token360 configuration for the Idea2Video pipeline.
+#
+# Token360 is an OpenAI-compatible gateway fronting 17+ providers
+# (OpenAI, Anthropic, Google, BytePlus Seedance, etc.).
+#
+# Set TOKEN360_API_KEY in your .env (project root) — every section below
+# reads it from the environment, so you don't need to paste keys here.
+#
+# Available chat models (subset; see scripts/probe_token360.py for full):
+#   gpt-4o, gpt-4o-mini, claude-sonnet-4-5, claude-haiku-4-5-20251001,
+#   gemini-2.5-flash, gemini-2.5-pro, deepseek-v3, qwen-max
+#
+# Confirmed video models (from Token360 docs):
+#   seedance-2.0-fast — fast, supports first_frame / last_frame / refs
+#   seedance-2.0     — higher-quality, same I/O modes
+#   seedance-1.5-pro — older
+
+chat_model:
+  init_args:
+    model: gpt-4o
+    model_provider: token360         # auto-resolves base_url + api_key from env
+  max_requests_per_minute: 500
+  max_requests_per_day: 2000
+
+image_generator:
+  class_path: tools.ImageGeneratorToken360API
+  init_args:
+    # api_key + base_url default to TOKEN360_API_KEY / TOKEN360_BASE_URL env vars
+    model: gemini-2.5-flash-image    # Nano Banana — ref-image-aware, ~9s/img (confirmed)
+    # alternatives:
+    #   nano-banana-pro    # Nano Banana Pro, higher quality, ~30s/img
+    #   seedream-4.0       # BytePlus Seedream 4.0, ~8s/img, ref-image-aware
+  max_requests_per_minute: 10
+  max_requests_per_day: 500
+
+video_generator:
+  class_path: tools.VideoGeneratorSeedanceToken360API
+  init_args:
+    t2v_model: seedance-2.0-fast
+    ff2v_model: seedance-2.0-fast
+    flf2v_model: seedance-2.0-fast
+  max_requests_per_minute: 5
+  max_requests_per_day: 100
+
+working_dir: .working_dir/idea2video_token360

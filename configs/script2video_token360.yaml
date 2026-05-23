@@ -1,0 +1,27 @@
+# Token360 configuration for the Script2Video pipeline.
+# See configs/idea2video_token360.yaml for the field reference.
+
+chat_model:
+  init_args:
+    model: gpt-4o
+    model_provider: token360
+  max_requests_per_minute: 500
+  max_requests_per_day: 2000
+
+image_generator:
+  class_path: tools.ImageGeneratorToken360API
+  init_args:
+    model: gemini-2.5-flash-image    # Nano Banana; alt: nano-banana-pro, seedream-4.0
+  max_requests_per_minute: 10
+  max_requests_per_day: 500
+
+video_generator:
+  class_path: tools.VideoGeneratorSeedanceToken360API
+  init_args:
+    t2v_model: seedance-2.0-fast
+    ff2v_model: seedance-2.0-fast
+    flf2v_model: seedance-2.0-fast
+  max_requests_per_minute: 5
+  max_requests_per_day: 100
+
+working_dir: .working_dir/script2video_token360

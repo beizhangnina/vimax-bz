@@ -12,3 +12,6 @@ wheels/
 # working directory
 .working_dir/
 .test/
+
+# secrets
+.env

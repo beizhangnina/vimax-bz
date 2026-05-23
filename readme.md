@@ -1,3 +1,41 @@
+> ### vimax-bz — Token360 fork
+>
+> This fork of [HKUDS/ViMax](https://github.com/HKUDS/ViMax) routes every model call through
+> [Token360](https://www.token360.ai), an OpenAI-compatible gateway that fronts Nano Banana Pro,
+> Dreamina Seedance 2.0, GPT-4o, Claude, Gemini, and 17+ other providers behind a single API key.
+>
+> **Quick start:**
+> ```bash
+> cp .env.example .env       # then paste your TOKEN360_API_KEY
+> uv sync
+> uv run python scripts/probe_token360.py        # confirm models are reachable
+> uv run python main_idea2video.py               # uses configs/idea2video_token360.yaml
+> ```
+>
+> Token360-specific files:
+> - `configs/idea2video_token360.yaml`, `configs/script2video_token360.yaml`
+> - `tools/image_generator_token360_api.py` — image gen via `gemini-2.5-flash-image` (Nano Banana) / `seedream-4.0` / `nano-banana-pro`
+> - `tools/video_generator_seedance_token360_api.py` — video gen via `seedance-2.0-fast` / `seedance-2.0`
+> - `scripts/probe_token360.py` — discover working model IDs on your key
+>
+> Edit `main_idea2video.py` to point `config_path` at the `_token360` YAML, or leave the originals
+> in place to use Google/Yunwu backends. The upstream README below describes the agent architecture
+> unchanged — only the tool layer has been swapped.
+>
+> **Known Token360 limitations (verified 2026-05):**
+> - `/images/generations` is text-prompt only. Sending a Seedream-style `image:[...]` reference
+>   field returns 403 from the AWS WAF. The adapter logs a warning and falls back to text-only
+>   generation. ViMax's front→side/back portrait flow will still run but without
+>   image-conditioned consistency.
+> - `seedance-2.0-fast` and `seedance-2.0` work via `/videos`. `dreamina-seedance-2.0` and
+>   `seedance-2.0-pro` (shown in the Token360 explore UI) return "not found or not active" on
+>   the standard plan — likely a paid tier.
+> - Seedance has content moderation: real-person input frames are rejected with
+>   `InputImageSensitiveContentDetected.PrivacyInformation`. For human characters, use Token360's
+>   Virtual Portrait / RealFace asset upload (not yet wired in this fork).
+
+---
+
 <div align="center">
   <img src="./assets/vimax.png"> 
 	<br>

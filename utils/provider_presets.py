@@ -10,6 +10,14 @@ import os
 import logging
 from typing import Dict, Any, Optional
 
+try:
+    from dotenv import load_dotenv
+    # Auto-load .env from CWD; safe no-op when missing. Keeps Token360 / MiniMax
+    # API keys out of YAML configs and out of version control.
+    load_dotenv()
+except ImportError:
+    pass
+
 logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
@@ -28,6 +36,20 @@ PROVIDER_PRESETS: Dict[str, Dict[str, Any]] = {
             "MiniMax-M2.5-highspeed",
         ],
         "temperature_range": (0.0, 1.0),
+    },
+    "token360": {
+        "base_url": "https://api.token360.ai/v1",
+        "env_key": "TOKEN360_API_KEY",
+        "default_model": "gpt-4o",
+        "models": [
+            "gpt-4o",
+            "gpt-4o-mini",
+            "claude-sonnet-4-5",
+            "claude-haiku-4-5-20251001",
+            "gemini-2.5-flash",
+            "deepseek-v3",
+        ],
+        "temperature_range": (0.0, 2.0),
     },
 }
 
