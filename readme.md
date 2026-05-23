@@ -14,25 +14,35 @@
 >
 > Token360-specific files:
 > - `configs/idea2video_token360.yaml`, `configs/script2video_token360.yaml`
-> - `tools/image_generator_token360_api.py` — image gen via `gemini-2.5-flash-image` (Nano Banana) / `seedream-4.0` / `nano-banana-pro`
-> - `tools/video_generator_seedance_token360_api.py` — video gen via `seedance-2.0-fast` / `seedance-2.0`
-> - `scripts/probe_token360.py` — discover working model IDs on your key
+> - `tools/image_generator_token360_api.py` — image gen via Nano Banana Pro (default), with i2i
+>   reference-image conditioning for character consistency
+> - `tools/video_generator_seedance_token360_api.py` — video gen via Seedance 2.0 (Dreamina), with
+>   first-frame / first+last-frame conditioning
+> - `tools/token360_assets.py` — shared uploader for Token360's `/v1/assets` API; uploads local
+>   reference images once and caches `asset://` URIs by SHA256
+> - `scripts/probe_token360.py` — model-ID discovery
 >
 > Edit `main_idea2video.py` to point `config_path` at the `_token360` YAML, or leave the originals
-> in place to use Google/Yunwu backends. The upstream README below describes the agent architecture
-> unchanged — only the tool layer has been swapped.
+> in place to use Google/Yunwu backends. The upstream README below describes the agent
+> architecture unchanged — only the tool layer has been swapped.
 >
-> **Known Token360 limitations (verified 2026-05):**
-> - `/images/generations` is text-prompt only. Sending a Seedream-style `image:[...]` reference
->   field returns 403 from the AWS WAF. The adapter logs a warning and falls back to text-only
->   generation. ViMax's front→side/back portrait flow will still run but without
->   image-conditioned consistency.
-> - `seedance-2.0-fast` and `seedance-2.0` work via `/videos`. `dreamina-seedance-2.0` and
->   `seedance-2.0-pro` (shown in the Token360 explore UI) return "not found or not active" on
->   the standard plan — likely a paid tier.
-> - Seedance has content moderation: real-person input frames are rejected with
->   `InputImageSensitiveContentDetected.PrivacyInformation`. For human characters, use Token360's
->   Virtual Portrait / RealFace asset upload (not yet wired in this fork).
+> **How reference images work (the gateway quirk):**
+> Token360's AWS WAF rejects inline base64 image data above a few KB in request bodies. The
+> documented and supported pattern is to upload references to `/v1/assets` first and pass them
+> back as `asset://ua_xxx` URIs. Both adapters do this automatically — call
+> `generate_single_image(prompt, ['/path/to/ref.png'])` and the adapter uploads transparently.
+> Uploads are cached by file SHA256, so repeated calls with the same reference re-use the
+> existing asset.
+>
+> **Default models (verified working 2026-05):**
+> - Image: `nano-banana-pro` (Google, reference-aware). Alternatives in the YAML.
+> - Video: `seedance-2.0` (Dreamina Seedance 2.0). Switch to `seedance-2.0-fast` for lower
+>   latency.
+> - Chat: `gpt-4o` via Token360. Any OpenAI/Anthropic/Gemini ID on Token360 works.
+>
+> **Real-person video:** Seedance has content moderation on first-frame inputs. For verified
+> human characters, create a `REAL_FACE` asset group via Token360's RealFace flow and pass the
+> resulting URIs to the video adapter via `portrait_asset_uris=["asset://..."]`.
 
 ---
 

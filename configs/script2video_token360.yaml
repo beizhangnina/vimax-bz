@@ -11,16 +11,17 @@ chat_model:
 image_generator:
   class_path: tools.ImageGeneratorToken360API
   init_args:
-    model: gemini-2.5-flash-image    # Nano Banana; alt: nano-banana-pro, seedream-4.0
+    model: nano-banana-pro
+    reference_field: reference_images
   max_requests_per_minute: 10
   max_requests_per_day: 500
 
 video_generator:
   class_path: tools.VideoGeneratorSeedanceToken360API
   init_args:
-    t2v_model: seedance-2.0-fast
-    ff2v_model: seedance-2.0-fast
-    flf2v_model: seedance-2.0-fast
+    t2v_model: seedance-2.0
+    ff2v_model: seedance-2.0
+    flf2v_model: seedance-2.0
   max_requests_per_minute: 5
   max_requests_per_day: 100
 

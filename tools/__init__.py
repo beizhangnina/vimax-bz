@@ -7,6 +7,7 @@ from .image_generator_doubao_seedream_yunwu_api import ImageGeneratorDoubaoSeedr
 from .image_generator_nanobanana_google_api import ImageGeneratorNanobananaGoogleAPI
 from .image_generator_nanobanana_yunwu_api import ImageGeneratorNanobananaYunwuAPI
 from .image_generator_token360_api import ImageGeneratorToken360API
+from .token360_assets import Token360AssetUploader
 
 # reranker for rag
 from .reranker_bge_silicon_api import RerankerBgeSiliconapi
@@ -26,6 +27,7 @@ __all__ = [
     "ImageGeneratorNanobananaGoogleAPI",
     "ImageGeneratorNanobananaYunwuAPI",
     "ImageGeneratorToken360API",
+    "Token360AssetUploader",
     "RerankerBgeSiliconapi",
     "VideoGeneratorDoubaoSeedanceYunwuAPI",
     "VideoGeneratorSeedanceToken360API",
